@@ -641,9 +641,64 @@ namespace QuanLyChiTieu
                     break;
             }
         }
+        // Hàm đọc dữ liệu hạn mức
+        static void DocDuLieuHanMuc()
+        {
+            try
+            {
+                // Kiểm tra xem tệp dữ liệu hạn mức có tồn tại không
+                if (File.Exists(hanMucFilePath))
+                {
+                    // Đọc dữ liệu từ tệp JSON
+                    string jsonData = File.ReadAllText(hanMucFilePath);
+                    // Giải mã dữ liệu JSON thành danh sách hạn mức
+                    danhSachHanMuc = JsonConvert.DeserializeObject<List<TaiChinh.QuanLyNganSach>>(jsonData); //?? new List<Budget.QuanLyNganSach>();
+                                                                                                             // Thông báo thành công khi tải dữ liệu
+                    Console.WriteLine("The budget limit data has been successfully loaded.");
+                }
+                else
+                {
+                    // Thông báo nếu không tìm thấy tệp dữ liệu và tạo tệp mới
+                    Console.WriteLine("No budget limit data file found. Starting with an empty list.");
+                    File.Create(hanMucFilePath).Close();
+                    Console.WriteLine("Created a new budget limit file: " + hanMucFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Thông báo lỗi khi đọc dữ liệu
+                Console.WriteLine($"Error reading data: {ex.Message}");
+            }
+        }
+        // Hàm lưu dữ liệu hạn mức
+        public static void LuuDuLieuHanMuc()
+        {
+            try
+            {
+                // Chuyển đổi danh sách hạn mức thành JSON
+                string jsonData = JsonConvert.SerializeObject(danhSachHanMuc, Newtonsoft.Json.Formatting.Indented);
+
+                // Ghi dữ liệu JSON vào tệp
+                File.WriteAllText(hanMucFilePath, jsonData);
+
+                // Thông báo khi lưu dữ liệu thành công
+                Console.WriteLine("The data has been successfully saved to the file.");
+            }
+            catch (Exception ex)
+            {
+                // Thông báo lỗi khi lưu dữ liệu
+                Console.WriteLine($"Error saving data: {ex.Message}");
+            }
+        }
         // Hàm quản lý hạn mức
         static void QuanLyHanmuc()
         {
+            // Đảm bảo rằng danhSachHanMuc không phải là null
+            if (danhSachHanMuc == null)
+            {
+                danhSachHanMuc = new List<TaiChinh.QuanLyNganSach>();
+            }
+
             // Yêu cầu người dùng nhập tháng muốn quản lý hạn mức
             Console.WriteLine("\nEnter the month you want to manage the budget limit (format: yyyy-MM):");
             string thangNam = Console.ReadLine();
@@ -699,6 +754,11 @@ namespace QuanLyChiTieu
                 Console.WriteLine("Invalid month format. Please enter in yyyy-MM format.");
                 return;
             }
+            if (danhSachGiaoDich == null || !danhSachGiaoDich.Any())
+            {
+                Console.WriteLine("No transaction data available. Please add transactions before checking the budget limit.");
+                return;
+            }
 
             // Tính tổng chi tiêu trong tháng
             var tongChiTieu = danhSachGiaoDich
@@ -738,55 +798,6 @@ namespace QuanLyChiTieu
             {
                 // Thông báo nếu không tìm thấy hạn mức cho tháng này
                 Console.WriteLine("No budget limit found for this month. Please set the budget first.");
-            }
-        }
-        // Hàm đọc dữ liệu hạn mức
-        static void DocDuLieuHanMuc()
-        {
-            try
-            {
-                // Kiểm tra xem tệp dữ liệu hạn mức có tồn tại không
-                if (File.Exists(hanMucFilePath))
-                {
-                    // Đọc dữ liệu từ tệp JSON
-                    string jsonData = File.ReadAllText(hanMucFilePath);
-                    // Giải mã dữ liệu JSON thành danh sách hạn mức
-                    danhSachHanMuc = JsonConvert.DeserializeObject<List<TaiChinh.QuanLyNganSach>>(jsonData); //?? new List<Budget.QuanLyNganSach>();
-                                                                                                             // Thông báo thành công khi tải dữ liệu
-                    Console.WriteLine("The budget limit data has been successfully loaded.");
-                }
-                else
-                {
-                    // Thông báo nếu không tìm thấy tệp dữ liệu và tạo tệp mới
-                    Console.WriteLine("No budget limit data file found. Starting with an empty list.");
-                    File.Create(hanMucFilePath).Close();
-                    Console.WriteLine("Created a new budget limit file: " + hanMucFilePath);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Thông báo lỗi khi đọc dữ liệu
-                Console.WriteLine($"Error reading data: {ex.Message}");
-            }
-        }
-        // Hàm lưu dữ liệu hạn mức
-        public static void LuuDuLieuHanMuc()
-        {
-            try
-            {
-                // Chuyển đổi danh sách hạn mức thành JSON
-                string jsonData = JsonConvert.SerializeObject(danhSachHanMuc, Newtonsoft.Json.Formatting.Indented);
-
-                // Ghi dữ liệu JSON vào tệp
-                File.WriteAllText(hanMucFilePath, jsonData);
-
-                // Thông báo khi lưu dữ liệu thành công
-                Console.WriteLine("The data has been successfully saved to the file.");
-            }
-            catch (Exception ex)
-            {
-                // Thông báo lỗi khi lưu dữ liệu
-                Console.WriteLine($"Error saving data: {ex.Message}");
             }
         }
 
