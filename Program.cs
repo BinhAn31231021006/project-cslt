@@ -35,8 +35,9 @@ namespace QuanLyChiTieu
     class Program
     {
         private static List<TaiChinh.GiaoDich> danhSachGiaoDich = new List<TaiChinh.GiaoDich>();
-        private static List<TaiChinh.QuanLyNganSach> danhSachHanMuc = new List<TaiChinh.QuanLyNganSach>();
         private static string filePath = "dulieu_giaodich.json";
+
+        private static List<TaiChinh.QuanLyNganSach> danhSachHanMuc = new List<TaiChinh.QuanLyNganSach>();
         private static string hanMucFilePath = "dulieu_hanmuc.json";
 
 
@@ -282,7 +283,7 @@ namespace QuanLyChiTieu
         public static async Task<string> GoiYDanhMuc(string moTa)
         {
             // API key và URL của Google Cloud Natural Language API
-            string apiKey = "AIzaSyDzlccBPctGvmTGQ8d5y2QRPxQJgqnjBh8";
+            string apiKey = "...";
             string url = "https://language.googleapis.com/v1/documents:classifyText?key=" + apiKey;
             string text = $"{moTa} with my family, including my dad, my mom, my son, my sister and my brother";
 
@@ -392,7 +393,7 @@ namespace QuanLyChiTieu
             try
             {
                 // API Endpoint và API Key 
-                string apiKey = "78e328c19bd1579fa05f86dd";
+                string apiKey = "...";
                 string url = $"https://v6.exchangerate-api.com/v6/{apiKey}/latest/{donViTienTe}";
 
                 // Gọi API ExchangeRate
@@ -635,6 +636,7 @@ namespace QuanLyChiTieu
         /// </summary>
         static void QuanLyVaKiemTraHanMuc()
         {
+
             if (danhSachGiaoDich.Count == 0)
             {
                 Console.WriteLine("Transaction list is empty.");
@@ -681,8 +683,8 @@ namespace QuanLyChiTieu
                     // Đọc dữ liệu từ tệp JSON
                     string jsonData = File.ReadAllText(hanMucFilePath);
                     // Giải mã dữ liệu JSON thành danh sách hạn mức
-                    danhSachHanMuc = JsonConvert.DeserializeObject<List<TaiChinh.QuanLyNganSach>>(jsonData); //?? new List<Budget.QuanLyNganSach>();
-                                                                                                             // Thông báo thành công khi tải dữ liệu
+                    danhSachHanMuc = JsonConvert.DeserializeObject<List<TaiChinh.QuanLyNganSach>>(jsonData); 
+                    // Thông báo thành công khi tải dữ liệu
                     Console.WriteLine("The budget limit data has been successfully loaded.");
                 }
                 else
