@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace QuanLyChiTieu
 {
+    //Andeptrai
     public class TaiChinh
     {
         public class GiaoDich
@@ -41,8 +42,6 @@ namespace QuanLyChiTieu
 
         static void Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.InputEncoding = System.Text.Encoding.UTF8;
             Console.WriteLine("Welcome to the Expense Management Program!");
             Console.WriteLine("-------------------------------------------------");
 
@@ -219,12 +218,37 @@ namespace QuanLyChiTieu
                     }
                     else if (dongY == "n")
                     {
-                        Console.WriteLine("Enter category:");
-                        danhMuc = Console.ReadLine();
+                        // Bắt buộc nhập danh mục không được trống
+                        while (true)
+                        {
+                            Console.WriteLine("Enter category:");
+                            danhMuc = Console.ReadLine().Trim();
+                            if (!string.IsNullOrEmpty(danhMuc))
+                            {
+                                break; // Dữ liệu hợp lệ, thoát vòng lặp
+                            }
+                            else
+                            {
+                                Console.WriteLine("Category cannot be empty. Please try again.");
+                            }
+                        }
 
-                        Console.WriteLine("Enter transaction time (yyyy-MM-dd HH:mm:ss):");
-                        thoiGian = DateTime.Parse(Console.ReadLine());
-                        break;
+                        // Bắt buộc nhập thời gian giao dịch hợp lệ
+                        while (true)
+                        {
+                            Console.WriteLine("Enter transaction time (yyyy-MM-dd HH:mm:ss):");
+                            string inputThoiGian = Console.ReadLine().Trim();
+
+                            if (DateTime.TryParseExact(inputThoiGian, "yyyy-MM-dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out thoiGian))
+                            {
+                                break; // Dữ liệu hợp lệ, thoát vòng lặp
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid datetime format. Please try again.");
+                            }
+                        }
+                        break; // Thoát vòng lặp lớn khi hoàn tất
                     }
                     else
                     {
@@ -611,6 +635,11 @@ namespace QuanLyChiTieu
         /// </summary>
         static void QuanLyVaKiemTraHanMuc()
         {
+            if (danhSachGiaoDich.Count == 0)
+            {
+                Console.WriteLine("Transaction list is empty.");
+                return;
+            }
             // Hiển thị tiêu đề chức năng quản lý và kiểm tra hạn mức
             Console.WriteLine("\n--- Manage and Check Budget Limits ---");
 
@@ -743,6 +772,11 @@ namespace QuanLyChiTieu
         // Hàm kiểm tra hạn mức       
         static void KiemTraHanmuc()
         {
+            if (danhSachHanMuc == null)
+            {
+                danhSachHanMuc = new List<TaiChinh.QuanLyNganSach>();
+            }
+
             // Yêu cầu người dùng nhập tháng muốn kiểm tra hạn mức
             Console.WriteLine("\nEnter the month you want to check the budget limit for (format: yyyy-MM):");
             string thangNam = Console.ReadLine();
@@ -752,11 +786,6 @@ namespace QuanLyChiTieu
             {
                 // Thông báo nếu định dạng tháng không hợp lệ
                 Console.WriteLine("Invalid month format. Please enter in yyyy-MM format.");
-                return;
-            }
-            if (danhSachGiaoDich == null || !danhSachGiaoDich.Any())
-            {
-                Console.WriteLine("No transaction data available. Please add transactions before checking the budget limit.");
                 return;
             }
 
@@ -807,6 +836,11 @@ namespace QuanLyChiTieu
         /// </summary>
         static void ThongKeBaoCao()
         {
+            if (danhSachGiaoDich.Count == 0)
+            {
+                Console.WriteLine("Transaction list is empty.");
+                return;
+            }
             // Hiển thị: Chọn phương án thống kê
             Console.WriteLine("Select a reporting option:");
             // Hiển thị: 1. Trong 1 năm
