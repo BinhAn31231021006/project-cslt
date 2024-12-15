@@ -258,7 +258,7 @@ namespace QuanLyChiTieu
         public static async Task<string> GoiYDanhMuc(string moTa)
         {
             // API key và URL của Google Cloud Natural Language API
-            string apiKey = "...";
+            string apiKey = "AIzaSyDzlccBPctGvmTGQ8d5y2QRPxQJgqnjBh8";
             string url = "https://language.googleapis.com/v1/documents:classifyText?key=" + apiKey;
             string text = $"{moTa} with my family, including my dad, my mom, my son, my sister and my brother";
 
@@ -1131,6 +1131,7 @@ namespace QuanLyChiTieu
                         string jsonData = File.ReadAllText(duongDanTep);
                         var danhSachGiaoDichMoi = JsonConvert.DeserializeObject<List<TaiChinh.GiaoDich>>(jsonData);
                         danhSachGiaoDich.AddRange(danhSachGiaoDichMoi);
+                        Console.WriteLine("The data has been successfully merged");
                     }
                 }
 
@@ -1245,6 +1246,7 @@ namespace QuanLyChiTieu
         }
     }
 }
+
 
 
 
