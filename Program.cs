@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace QuanLyChiTieu
 {
-    //Andeptrai
+
     public class TaiChinh
     {
         public class GiaoDich
@@ -157,6 +157,10 @@ namespace QuanLyChiTieu
         /// <exception cref="FormatException"></exception>
         static async Task NhapGiaoDichMoi()
         {
+            if (danhSachGiaoDich == null)
+            {
+                danhSachGiaoDich = new List<TaiChinh.GiaoDich>();
+            } 
             try
             {
                 // Bước 1: Nhập mô tả và số tiền
@@ -435,7 +439,7 @@ namespace QuanLyChiTieu
             try
             {
                 Console.WriteLine("\n--- Edit/Delete Transaction---");
-                if (danhSachGiaoDich.Count == 0)
+                if (danhSachGiaoDich == null || danhSachGiaoDich.Count == 0)
                 {
                     Console.WriteLine("Transaction list is empty.");
                     return;
@@ -477,7 +481,11 @@ namespace QuanLyChiTieu
                     {
                         giaoDich.SoTien = soTienMoi;
                     }
-
+                    else
+                    {
+                        Console.WriteLine("Invalid Input! or null. Your amount will be kept the same");
+                    }  
+               
                     Console.WriteLine("Enter the new category (or press Enter to keep the same):");
                     string danhMucMoi = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(danhMucMoi))
@@ -490,6 +498,10 @@ namespace QuanLyChiTieu
                     if (!string.IsNullOrWhiteSpace(thoiGianMoiStr) && DateTime.TryParse(thoiGianMoiStr, out DateTime thoiGianMoi))
                     {
                         giaoDich.ThoiGian = thoiGianMoi;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Input! or null. Your time will be kept the same");
                     }
 
                     Console.WriteLine("Transaction has been successfully updated.");
@@ -523,6 +535,11 @@ namespace QuanLyChiTieu
         /// </summary>
         static void TruyXuatGiaoDich()
         {
+            if (danhSachGiaoDich == null || danhSachGiaoDich.Count == 0)
+            {
+                Console.WriteLine("Transaction list is empty.");
+                return;
+            }
             // Bắt đầu khối lệnh có thể xảy ra lỗi
             try
             {
@@ -630,7 +647,7 @@ namespace QuanLyChiTieu
         static void QuanLyVaKiemTraHanMuc()
         {
 
-            if (danhSachGiaoDich.Count == 0)
+            if (danhSachGiaoDich == null || danhSachGiaoDich.Count == 0)
             {
                 Console.WriteLine("Transaction list is empty.");
                 return;
@@ -831,7 +848,7 @@ namespace QuanLyChiTieu
         /// </summary>
         static void ThongKeBaoCao()
         {
-            if (danhSachGiaoDich.Count == 0)
+            if (danhSachGiaoDich == null || danhSachGiaoDich.Count == 0)
             {
                 Console.WriteLine("Transaction list is empty.");
                 return;
@@ -911,6 +928,11 @@ namespace QuanLyChiTieu
             var giaoDichTrongKhoang = danhSachGiaoDich
                 .Where(gd => gd.ThoiGian >= startDate && gd.ThoiGian <= endDate)
                 .ToList();
+            if (!giaoDichTrongKhoang.Any())
+            {
+                Console.WriteLine("No transactions found in the selected period.");
+                return;
+            }
 
             // Nhóm giao dịch theo tháng và tính tổng chi tiêu theo từng danh mục
             var chiTieuTheoThang = giaoDichTrongKhoang
@@ -952,6 +974,11 @@ namespace QuanLyChiTieu
             var giaoDichTrongKhoang = danhSachGiaoDich
                 .Where(gd => gd.ThoiGian >= startDate && gd.ThoiGian <= endDate)
                 .ToList();
+            if (!giaoDichTrongKhoang.Any())
+            {
+                Console.WriteLine("No transactions found in the selected period.");
+                return;
+            }
 
             // Nhóm giao dịch theo tuần và tính tổng chi tiêu
             var chiTieuTheoTuan = giaoDichTrongKhoang
@@ -992,6 +1019,11 @@ namespace QuanLyChiTieu
             var giaoDichTrongKhoang = danhSachGiaoDich
                 .Where(gd => gd.ThoiGian >= startDate && gd.ThoiGian <= endDate)
                 .ToList();
+            if (!giaoDichTrongKhoang.Any())
+            {
+                Console.WriteLine("No transactions found in the selected period.");
+                return;
+            }
 
             // Nhóm giao dịch theo ngày và tính tổng chi tiêu cho từng ngày
             var chiTieuTheoNgay = giaoDichTrongKhoang
