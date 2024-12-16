@@ -441,13 +441,6 @@ namespace QuanLyChiTieu
                     return;
                 }
 
-                // Hiển thị danh sách giao dịch
-                Console.WriteLine("Danh sách giao dịch:");
-                foreach (var gd in danhSachGiaoDich)
-                {
-                    Console.WriteLine($"Serial number: {gd.SoThuTu}, Description: {gd.MoTa}, Amount: {gd.SoTien}, Category: {gd.DanhMuc}, Time: {gd.ThoiGian}");
-                }
-
                 // Yêu cầu người dùng chọn giao dịch cần sửa hoặc xóa
                 Console.Write("Enter the transaction serial number to edit or delete: ");
                 if (!int.TryParse(Console.ReadLine(), out int soThuTu) || soThuTu <= 0 || soThuTu > danhSachGiaoDich.Count)
